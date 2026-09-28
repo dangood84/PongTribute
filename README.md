@@ -80,7 +80,7 @@ Use the **desktop** image. A Lite or SSH-only session has no window to open.
 ```bash
 sudo apt update
 sudo apt install build-essential cmake git \
-  libgl1-mesa-dev libglu1-mesa-dev \
+  libgl1-mesa-dev libglu1-mesa-dev libgles2-mesa-dev libegl1-mesa-dev \
   libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
   libxext-dev libxrender-dev \
   libasound2-dev
@@ -89,13 +89,19 @@ sudo apt install build-essential cmake git \
 If `libasound2-dev` is missing on a newer Debian, install `libasound-dev` instead. `libraylib-dev` is optional: when the package is new enough, CMake uses it and skips the download.
 
 ```bash
-make
+make clean
 make run
 ```
+
+`make clean` matters the first time after this fix, and any time an older `build/` folder is still on the Pi. That folder was compiled for OpenGL 3.3.
 
 Or `./build/pong` from a terminal on the Pi's own desktop. Raspberry Pi OS Bookworm often runs Wayland; Raylib's window goes through X11 or XWayland. If no window appears, switch the session to X11 in Raspberry Pi configuration, then run it again.
 
 32-bit (`armhf`) and 64-bit (`aarch64`) Pi OS both work. Compile on the Pi. An Apple Silicon `build/pong` will not run there.
+
+A CMake line that says compatibility with CMake &lt; 3.10 will be removed is from Raylib 5.5's own build files. The compile still finishes.
+
+If `./build/pong` then prints `GLX: Failed to create context: GLXBadFBConfig` and `make` reports a segmentation fault, the game binary was built, and the Pi refused the OpenGL 3.3 window. ARM Linux now configures Raylib with OpenGL ES 2.0 (`OPENGL_VERSION=ES 2.0`). Confirm the next configure prints `ARM Linux: Raylib will use OpenGL ES 2.0.` A desktop Linux PC is left on OpenGL 3.3. To force a choice: `make CMAKE_ARGS="-DPONG_OPENGL_VERSION=ES 2.0"`.
 
 ## Run
 

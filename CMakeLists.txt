@@ -36,6 +36,18 @@ if(PONG_RAYLIB_TARGET STREQUAL "")
     endif()
 
     message(STATUS "System Raylib was not found. Downloading Raylib ${PONG_RAYLIB_TAG}.")
+
+    # Pi desktop GLX has no OpenGL 3.3 framebuffer config. GLFW then reports
+    # GLXBadFBConfig and the process crashes inside InitWindow. "ES 2.0" makes
+    # Raylib ask GLFW for an EGL + OpenGL ES context, which Mesa on the Pi can open.
+    set(PONG_OPENGL_VERSION "" CACHE STRING "Raylib OPENGL_VERSION when building Raylib from source. Example: ES 2.0")
+    if(PONG_OPENGL_VERSION)
+        set(OPENGL_VERSION "${PONG_OPENGL_VERSION}" CACHE STRING "Force a specific OpenGL Version?" FORCE)
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|ARM|aarch64)")
+        set(OPENGL_VERSION "ES 2.0" CACHE STRING "Force a specific OpenGL Version?" FORCE)
+        message(STATUS "ARM Linux: Raylib will use OpenGL ES 2.0.")
+    endif()
+
     include(FetchContent)
     FetchContent_Declare(
         raylib

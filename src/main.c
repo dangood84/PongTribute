@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -520,6 +521,14 @@ int main(void)
     Game game = {0};
 
     InitWindow(SCREEN_W, SCREEN_H, "Pong Tribute");
+    if (!IsWindowReady())
+    {
+        fprintf(stderr,
+            "Pong Tribute: the window did not open.\n"
+            "On a Raspberry Pi, GLFW error GLXBadFBConfig means OpenGL 3.3 is unavailable.\n"
+            "From this folder run: make clean && make run\n");
+        return 1;
+    }
     InitAudioDevice();
     SetTargetFPS(60);
     SetRandomSeed((unsigned int)time(NULL));

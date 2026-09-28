@@ -53,7 +53,7 @@ while (!WindowShouldClose())
 ### Lifecycle, step by step
 
 1. **The OS** starts `build/pong` (or `build\pong.exe`).
-2. **`InitWindow`** opens a 960×540 window titled `Pong Tribute` and creates the OpenGL context. **`InitAudioDevice`** opens the sound device. **`SetTargetFPS(60)`** asks the loop to wake at 60Hz. **`SetRandomSeed`** seeds serve direction and the up/down coin flip from the clock.
+2. **`InitWindow`** opens a 960×540 window titled `Pong Tribute` and creates the graphics context. On Apple Silicon that context is OpenGL 3.3 (the Homebrew Raylib). On ARM Linux, including Raspberry Pi OS, the bundled Raylib is built for OpenGL ES 2.0, because the Pi's GLX driver has no OpenGL 3.3 framebuffer and `glfwCreateWindow` then dies with `GLXBadFBConfig`. **`InitAudioDevice`** opens the sound device. If `IsWindowReady` is false, `main` prints a short note and returns 1. The usual Pi crash happens inside `InitWindow` before that check, which is why the rebuild (not a retry of the same binary) is the fix. **`SetTargetFPS(60)`** asks the loop to wake at 60Hz. **`SetRandomSeed`** seeds serve direction and the up/down coin flip from the clock.
 3. **Paddle rectangles** are placed. The left one sits `PADDLE_MARGIN` pixels in from the left edge. The right one mirrors it. **`ai` starts true**: the right paddle is the computer, so a single player sees a rally immediately.
 4. **`make_tone`** builds three short square waves (paddle, wall, score) and hands them to Raylib. **`UnloadWave`** frees the sample buffer; the `Sound` keeps its own copy.
 5. **`reset_match`** zeros the scores, centres the paddles, and calls **`begin_serve`**. The ball is in the middle. `velocity` is `{0,0}`. `serveTimer` is `0.85` seconds. `serveDir` is `+1` or `-1` at random.
