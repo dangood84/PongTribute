@@ -1,0 +1,72 @@
+# Build output (all four hosts)
+build/
+cmake-build-*/
+bin/
+compile_commands.json
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CMakeUserPresets.json
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.dSYM/
+*.pdb
+*.ilk
+*.exp
+*.map
+*.res
+*.idb
+*.su
+a.out
+*.out
+*.app
+pong
+
+# Core dumps — Linux / Raspberry Pi OS
+core
+core.*
+vgcore.*
+*.core
+*.stackdump
+
+# macOS Finder / resource-fork noise
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+
+# Windows 10 Explorer / recycle / shortcuts
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Editors / IDEs
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+.cursor/
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# Logs
+*.log
